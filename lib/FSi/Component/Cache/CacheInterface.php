@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the FSi Symfony Extension package.
+ * This file is part of the FSi Component package.
  *
  * (c) Norbert Orzechowicz <norbert@fsi.pl>
  *
