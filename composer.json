@@ -1,0 +1,23 @@
+{
+    "repositories": [ { "type": "composer", "url": "http://git.fsi.pl/" } ],
+    "name": "fsi/cache",
+    "type": "library",
+    "description": "FSi Cache Component",
+    "keywords": ["fsi", "component", "cache"],
+    "authors": [
+        {
+            "name": "Norbert Orzechowicz",
+            "email": "norbert@fsi.pl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "fsi/reflection": "0.9.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "FSi/Component/Cache": "lib"
+        }
+    },
+    "minimum-stability" : "dev"
+}
