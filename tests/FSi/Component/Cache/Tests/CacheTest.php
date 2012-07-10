@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FSi\Tests\Component\Cache;
+namespace FSi\Component\Cache\Tests;
 
 
 abstract class CacheTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +40,7 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $cache->setNamespace('testnamespace');
         $cache->setItem('key1', 'test');
         $this->assertTrue($cache->hasItem('key1'));
-        
+
         $cache->setNamespace('testnamespace1');
         $this->assertFalse($cache->hasItem('key1'));
 
@@ -89,7 +89,7 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $cache->setNamespace('testnamespace');
         $this->assertFalse($cache->hasItem('key'));
     }
-    
-    
+
+
     abstract protected function _getCacheDriver();
 }

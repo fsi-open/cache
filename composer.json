@@ -16,8 +16,7 @@
     },
     "autoload": {
         "psr-0": {
-            "FSi/Component/Cache": "lib"
+            "FSi\\Component\\Cache": "lib/"
         }
-    },
-    "minimum-stability" : "dev"
+    }
 }

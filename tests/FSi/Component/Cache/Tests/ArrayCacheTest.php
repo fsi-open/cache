@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FSi\Tests\Component\Cache;
+namespace FSi\Component\Cache\Tests;
 
 use FSi\Component\Cache\ArrayCache;
 

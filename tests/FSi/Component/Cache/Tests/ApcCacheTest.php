@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FSi\Tests\Component\Cache;
+namespace FSi\Component\Cache\Tests;
 
 use FSi\Component\Cache\ApcCache;
 
@@ -21,7 +21,7 @@ class ApcCacheTest extends CacheTest
             $this->markTestSkipped('The ' . __CLASS__ .' requires the use of APC');
         }
     }
-    
+
     protected function _getCacheDriver()
     {
         return new ApcCache();

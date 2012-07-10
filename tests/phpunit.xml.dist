@@ -12,7 +12,7 @@
 >
     <testsuites>
         <testsuite name="FSi Component Cache Test Suite">
-            <directory>./FSi/Tests/Component/Cache/</directory>
+            <directory>./FSi/Component/Cache/Tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
