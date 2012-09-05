@@ -59,7 +59,7 @@ class ApcCache extends AbstractCache
      */
     public function addItem($key, $item, $lifetime = 0)
     {
-        if (!apc_add($this->buildKey($key), $item, $lifetime)) {
+        if (!apc_add($this->buildKey($key), $item, (int)$lifetime)) {
             return false;
         }
         return true;
@@ -70,7 +70,7 @@ class ApcCache extends AbstractCache
      */
     public function setItem($key, $item, $lifetime = 0)
     {
-        if (!apc_store($this->buildKey($key), $item, $lifetime)) {
+        if (!apc_store($this->buildKey($key), $item, (int)$lifetime)) {
             return false;
         }
         return true;

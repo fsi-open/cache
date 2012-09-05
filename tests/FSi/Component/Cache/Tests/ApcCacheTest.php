@@ -26,4 +26,9 @@ class ApcCacheTest extends CacheTest
     {
         return new ApcCache();
     }
+
+    public function testLifeTime()
+    {
+        $this->markTestSkipped('APC cache does not implement lifetime.');
+    }
 }

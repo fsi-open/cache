@@ -90,6 +90,17 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->hasItem('key'));
     }
 
+    public function testLifeTime()
+    {
+       $cache = $this->_getCacheDriver();
+       $cache->setItem('key', 'test', 20);
+       $cache->setItem('key1', 'test', 3);
+       
+       sleep(7);
+       
+       $this->assertTrue($cache->hasItem('key'));
+       $this->assertFalse($cache->hasItem('key1'));
+    }
 
     abstract protected function _getCacheDriver();
 }

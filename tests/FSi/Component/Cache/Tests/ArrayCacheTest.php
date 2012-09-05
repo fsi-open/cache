@@ -19,4 +19,9 @@ class ArrayCacheTest extends CacheTest
     {
         return new ArrayCache();
     }
+    
+    public function testLifeTime()
+    {
+        $this->markTestSkipped('Array cache does not implement lifetime.');
+    }
 }

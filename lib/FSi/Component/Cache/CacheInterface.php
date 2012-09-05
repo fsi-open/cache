@@ -29,7 +29,7 @@ interface CacheInterface
     public function hasItem($key);
 
     /**
-     * Cache item in the cache, only if it's not already cached.
+     * Add item into cache, only if it's not already cached.
      * 
      * @param string $key
      * @param mixed $item
