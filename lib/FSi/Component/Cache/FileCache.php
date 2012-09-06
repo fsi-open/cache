@@ -28,10 +28,35 @@ class FileCache extends AbstractCache
      * 
      * @var integer
      */
-    protected $dirLevel;
+    protected $dirlvl = 0;
 
-    public function __construct($directory, $dirLevel = 0)
+    /**
+     * Required options
+     * 'directory' (string) the root directory for cache. 
+     * 
+     * Allowed options 
+     * 'dirlvl' (integer) must be lower than 32. Cache directory deep level.
+     * The more items in cache the greater should be the dirlvl parameter.  
+     * 
+     * Example: 
+     * new FileCache(array('directory' => '/tmp', 'dirlvl' => 3));
+     * 
+     * @param unknown_type $options
+     */
+    public function __construct($options = array())
     {
+        if (!is_array($options)) {
+            throw new \InvalidArgumentException('File Cache require options as an array.');
+        }
+        
+        if (!array_key_exists('directory', $options)) {
+            throw new \InvalidArgumentException(
+            	'File Cache require cache directory path in options. '.
+                'Example: new FileCache(array(\'directory\' => \'/tmp\'));'
+            );
+        }
+        $directory = $options['directory'];
+        
         if (!is_dir($directory) && ! @mkdir($directory, 0777, true)) {
             throw new \InvalidArgumentException(sprintf(
                 'Cache directory "%s" does not exist and could not be created.',
@@ -46,15 +71,13 @@ class FileCache extends AbstractCache
             ));
         }
 
-        if ((int)$dirLevel > 32 ) {
-            throw new \InvalidArgumentException(sprintf(
-                'Dir Level cant be greater than 32.',
-                $directory
-            )); 
+        if (array_key_exists('dirlvl', $options)) {
+            $dirlvl = (int)$options['dirlvl'];
+            if ((int)$dirlvl > 32 ) {
+                throw new \InvalidArgumentException('Dir Level cant be greater than 32.'); 
+            }    
         }
-
-        $this->dirLevel  = (int) $dirLevel;
-        $this->directory = realpath($directory);
+        parent::setOptions($options);
     }
 
     /**
@@ -251,8 +274,12 @@ class FileCache extends AbstractCache
     protected function getFileName($key)
     {
         $key = md5($key);
-        $filePath = array_slice(str_split($key, (floor(strlen($key) / $this->dirLevel))), 0, $this->dirLevel);
-
+        $filePath = array();
+        
+        if ($this->dirlvl) {
+            $filePath = array_slice(str_split($key, (floor(strlen($key) / $this->dirlvl))), 0, $this->dirlvl);
+        }
+        
         $path = $this->namespace . $this->namespaceSeparator . $key;
         $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $path;
         $path = $this->directory . DIRECTORY_SEPARATOR . $path;

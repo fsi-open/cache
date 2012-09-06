@@ -25,10 +25,16 @@ class FileCacheTest extends CacheTest
     
     protected function _getCacheDriver()
     {
+        for ($i = 0; $i <= 32; $i ++) {
+            $this->assertFalse(is_dir($this->cacheDir));
+            $cache = new FileCache(array('directory' => $this->cacheDir, 'dirlevel' => $i));
+            $this->assertTrue(is_dir($this->cacheDir));
+            $this->rrmdir($this->cacheDir);
+        }
+        
         $this->assertFalse(is_dir($this->cacheDir));
-        $cache = new FileCache($this->cacheDir, 3);
+        $cache = new FileCache(array('directory' => $this->cacheDir));
         $this->assertTrue(is_dir($this->cacheDir));
-
         return $cache;
     }
     
