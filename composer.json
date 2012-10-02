@@ -1,8 +1,7 @@
 {
-    "repositories": [ { "type": "composer", "url": "http://git.fsi.pl/" } ],
     "name": "fsi/cache",
     "type": "library",
-    "description": "FSi Cache Component",
+    "description": "FSi Cache - Lightweight component that supports different cache storages with namespaces.",
     "keywords": ["fsi", "component", "cache"],
     "authors": [
         {
