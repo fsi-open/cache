@@ -9,11 +9,19 @@ By default all cache types use ``fsicache`` namespace by default, you can change
 
     $cache->setNamespace('namespace-name');
 
-or when cache instance is created
+or when cache instance is created. Opiton ``'namespace'`` can be used in all types of cache. 
 
     $cache = new ArrayCache(array('namespace' => 'namespace-name'));
 
-Opiton ``'namespace'`` can be used in all types of cache. 
+there is also a possibility to pass namespace as optional parameter into methods:
+
+- ``getItem($key, $namespace = null)``
+- ``hasItem($key, $namespace = null)``
+- ``addItem($key, $item, $lifetime = 0, $namespace = null)``
+- ``setItem($key, $item, $lifetime = 0, $namespace = null)``
+- ``removeItem($key, $namespace = null)``
+
+If ``$namespace`` is null the current namespace is taken from method ``getNamespace()``. 
 
 ## Array Cache ##
 
@@ -42,13 +50,15 @@ There is also an additional parameter ``$options['dirlvl']`` that describe how d
 
     $cache = new FileCache(array('directory' => '/tmp', 'dirlvl' => 3));
 
-## Samples ##
+## Examples ##
+
+**Basic Usage**
 
     <?php 
     
     use FSi\Component\Cache\ApcCache;
     
-    // create apc cache instance 
+    // create apc cache instance with default namespace 
     $cache = new ApcCache(); 
     
     // check if there is a foo
@@ -58,4 +68,23 @@ There is also an additional parameter ``$options['dirlvl']`` that describe how d
         // store foo-value in cache under key foo for 3600 seconds
         $cache->setItem('foo', 'foo-value', 3600);
     }
+    ?>
+
+**Namespace Usage**
+
+    <?php 
+    
+    use FSi\Component\Cache\ApcCache;
+    
+    // create apc cache instance with default namespace 
+    $cache = new ApcCache(); 
+    
+    $cache->setItem('key1', 'test', 0, 'testnamespace1');
+    $cache->setItem('key2', 'test', 0, 'testnamespace2');
+         
+    $cache->hasItem('key1', 'testnamespace1'); // will return true
+    $cache->hasItem('key2', 'testnamespace2'); // will return true
+    
+    $cache->hasItem('key2', 'testnamespace1'); //will return false
+    $cache->hasItem('key1', 'testnamespace2'); //will return false
     ?>
