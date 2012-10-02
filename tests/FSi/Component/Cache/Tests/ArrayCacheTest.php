@@ -17,7 +17,9 @@ class ArrayCacheTest extends CacheTest
 {
     protected function _getCacheDriver()
     {
-        return new ArrayCache();
+        $cache = new ArrayCache();
+        $cache->clear();
+        return $cache;
     }
     
     public function testLifeTime()

@@ -35,6 +35,7 @@ class FileCacheTest extends CacheTest
         $this->assertFalse(is_dir($this->cacheDir));
         $cache = new FileCache(array('directory' => $this->cacheDir));
         $this->assertTrue(is_dir($this->cacheDir));
+        $cache->clear();
         return $cache;
     }
     

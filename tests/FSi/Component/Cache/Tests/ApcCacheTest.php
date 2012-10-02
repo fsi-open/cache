@@ -24,7 +24,9 @@ class ApcCacheTest extends CacheTest
 
     protected function _getCacheDriver()
     {
-        return new ApcCache();
+        $cache = new ApcCache();
+        $cache->clear();
+        return $cache;
     }
 
     public function testLifeTime()

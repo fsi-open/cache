@@ -61,8 +61,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Get namespace for cache
-     * @return string 
+     * {@inheritdoc}
      */
     public function getNamespace()
     {
@@ -70,10 +69,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Sets cache namespace
-     * 
-     * @param string $namespace
-     * @return CacheAdapterInterface
+     * {@inheritdoc}
      */
     public function setNamespace($namespace)
     {

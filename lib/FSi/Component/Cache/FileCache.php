@@ -83,11 +83,11 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function getItem($key)
+    public function getItem($key, $namespace = null)
     {
         $item     = '';
         $lifetime = -1;
-        $filename = $this->getFilename($key);
+        $filename = $this->getFilename($key, $namespace);
 
         if (!file_exists($filename)) {
             return false;
@@ -117,9 +117,9 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function addItem($key, $item, $lifetime = 0)
+    public function addItem($key, $item, $lifetime = 0, $namespace = null)
     {
-        $filename     = $this->getFileName($key);
+        $filename     = $this->getFileName($key, $namespace);
         
         if ($this->hasItem($key)) {
             return false;
@@ -142,10 +142,10 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function setItem($key, $item, $lifetime = 0)
+    public function setItem($key, $item, $lifetime = 0, $namespace = null)
     {
         $item         = serialize($item);
-        $filename     = $this->getFileName($key);
+        $filename     = $this->getFileName($key, $namespace);
         $filepath     = pathinfo($filename, PATHINFO_DIRNAME);
 
         if ($lifetime > 0) {
@@ -162,10 +162,10 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function hasItem($key)
+    public function hasItem($key, $namespace = null)
     {
         $lifetime = -1;
-        $filename = $this->getFilename($key);
+        $filename = $this->getFilename($key, $namespace);
 
         if (!file_exists($filename)) {
             return false;
@@ -189,9 +189,9 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function removeItem($key)
+    public function removeItem($key, $namespace = null)
     {
-        return unlink($this->getFilename($key));
+        return unlink($this->getFilename($key, $namespace));
     }
 
     /**
@@ -271,7 +271,7 @@ class FileCache extends AbstractCache
      * 
      * @return string
      */
-    protected function getFileName($key)
+    protected function getFileName($key, $namespace = null)
     {
         $key = md5($key);
         $filePath = array();
@@ -279,8 +279,9 @@ class FileCache extends AbstractCache
         if ($this->dirlvl) {
             $filePath = array_slice(str_split($key, (floor(strlen($key) / $this->dirlvl))), 0, $this->dirlvl);
         }
-        
-        $path = $this->namespace . $this->namespaceSeparator . $key;
+
+        $currentNamespace = (isset($namespace)) ? $namespace : $this->getNamespace();
+        $path = $currentNamespace . $this->namespaceSeparator . $key;
         $path = implode(DIRECTORY_SEPARATOR, $filePath) . DIRECTORY_SEPARATOR . $path;
         $path = $this->directory . DIRECTORY_SEPARATOR . $path;
 

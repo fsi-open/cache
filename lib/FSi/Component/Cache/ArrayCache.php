@@ -25,82 +25,96 @@ class ArrayCache extends AbstractCache
         parent::__construct($options);
         self::$cache[$this->getNamespace()] = array();
     }
-    
-    public function setNamespace($namespace)
-    {
-        parent::setNamespace($namespace);
-        if (!isset(self::$cache[$this->getNamespace()]))
-            self::$cache[$this->getNamespace()] = array();
-    }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function getItem($key)
+    public function getItem($key, $namespace = null)
     {
-        if (!isset(self::$cache[$this->getNamespace()][$key]))
+        $curretnNamespace = $this->buildNamespace($namespace);
+        if (!isset(self::$cache[$curretnNamespace][$key])) {
             return false;
-        
-        return self::$cache[$this->getNamespace()][$key];
+        }
+
+        return self::$cache[$curretnNamespace][$key];
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function addItem($key, $item, $lifetime = 0)
+    public function addItem($key, $item, $lifetime = 0, $namespace = null)
     {
-        if ($this->hasItem($key))
+        if ($this->hasItem($key)) {
             return false;
-            
-        self::$cache[$this->getNamespace()][$key] = $item;
+        }
+
+        $curretnNamespace = $this->buildNamespace($namespace);
+
+        self::$cache[$curretnNamespace][$key] = $item;
         return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setItem($key, $item, $lifetime = 0)
+    public function setItem($key, $item, $lifetime = 0, $namespace = null)
     {
-        self::$cache[$this->getNamespace()][$key] = $item;
+        $curretnNamespace = $this->buildNamespace($namespace);
+        self::$cache[$curretnNamespace][$key] = $item;
         return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hasItem($key)
+    public function hasItem($key, $namespace = null)
     {
-        if (!isset(self::$cache[$this->getNamespace()][$key]))
+        $curretnNamespace = $this->buildNamespace($namespace);
+        if (!isset(self::$cache[$curretnNamespace][$key])) {
             return false;
-        
+        }
+
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function removeItem($key)
+    public function removeItem($key, $namespace = null)
     {
-        if (!$this->hasItem($key))
+        if (!$this->hasItem($key)) {
             return false;
-            
-        unset(self::$cache[$this->getNamespace()][$key]);
+        }
+
+        $curretnNamespace = $this->buildNamespace($namespace);
+        unset(self::$cache[$curretnNamespace][$key]);
         return true;
     }
 
     public function clear()
     {
-        foreach (self::$cache as $key => $namespace) {
-            self::$cache[$key] = array();
+        foreach (self::$cache as $namespace => $storage) {
+            self::$cache[$namespace] = array();
         }
+
         return true;
     }
-    
+
     public function clearNamespace($namespace)
     {
         if (isset(self::$cache[$namespace])) {
             self::$cache[$namespace] = array();
         }
         return true;
+    }
+
+    private function buildNamespace($namespace = null)
+    {
+        $curretnNamespace = (isset($namespace)) ? $namespace : $this->getNamespace();
+        if (!array_key_exists($curretnNamespace, self::$cache)) {
+            self::$cache[$curretnNamespace] = array();
+        }
+
+        return $curretnNamespace;
     }
 }

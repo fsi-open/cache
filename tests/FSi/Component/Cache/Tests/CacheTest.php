@@ -34,6 +34,19 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->hasItem('test_cache_key'));
     }
 
+    public function testNamespaceWithSetGetItem()
+    {
+        $cache = $this->_getCacheDriver();
+        $cache->setItem('key1', 'test', 0, 'testnamespace1');
+        $cache->setItem('key2', 'test', 0, 'testnamespace2');
+         
+        $this->assertTrue($cache->hasItem('key1', 'testnamespace1'));
+        $this->assertTrue($cache->hasItem('key2', 'testnamespace2'));
+        
+        $this->assertFalse($cache->hasItem('key2', 'testnamespace1'));
+        $this->assertFalse($cache->hasItem('key1', 'testnamespace2'));
+    }
+    
     public function testNamespace()
     {
         $cache = $this->_getCacheDriver();
@@ -46,6 +59,8 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
 
         $cache->setItem('key2', 'test');
         $this->assertTrue($cache->hasItem('key2'));
+        
+        $cache->clear();
     }
 
     public function testClearCache()

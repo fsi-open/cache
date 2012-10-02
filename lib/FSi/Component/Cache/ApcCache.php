@@ -43,10 +43,10 @@ class ApcCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function getItem($key)
+    public function getItem($key, $namespace = null)
     {
         $success  = null;
-        $item     = apc_fetch($this->buildKey($key), $success);
+        $item     = apc_fetch($this->buildKey($key, $namespace), $success);
 
         if (!$success) {
             return $success;
@@ -57,9 +57,9 @@ class ApcCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function addItem($key, $item, $lifetime = 0)
+    public function addItem($key, $item, $lifetime = 0, $namespace = null)
     {
-        if (!apc_add($this->buildKey($key), $item, (int)$lifetime)) {
+        if (!apc_add($this->buildKey($key, $namespace), $item, (int)$lifetime)) {
             return false;
         }
         return true;
@@ -68,9 +68,9 @@ class ApcCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function setItem($key, $item, $lifetime = 0)
+    public function setItem($key, $item, $lifetime = 0, $namespace = null)
     {
-        if (!apc_store($this->buildKey($key), $item, (int)$lifetime)) {
+        if (!apc_store($this->buildKey($key, $namespace), $item, (int)$lifetime)) {
             return false;
         }
         return true;
@@ -79,28 +79,34 @@ class ApcCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function hasItem($key)
+    public function hasItem($key, $namespace = null)
     {
-        return apc_exists($this->buildKey($key));
+        return apc_exists($this->buildKey($key, $namespace));
     }
     
     /**
      * {@inheritdoc}
      */
-    public function removeItem($key)
+    public function removeItem($key, $namespace = null)
     {
-        if (!$this->hasItem($key))
+        if (!$this->hasItem($key, $namespace))
             return false;
 
-        return apc_delete($this->buildKey($key));
+        return apc_delete($this->buildKey($key, $namespace));
     }
     
     /**
      * Build key from namespace and namespaceSeparator;
+     * If optional parameter is $namespace is null namespace is taken from
+     * method getNamespace()
+     * 
+     * @return string
      */
-    protected function buildKey($key)
+    protected function buildKey($key, $namespace = null)
     {
-        return $this->getNamespace() . $this->namespaceSeparator . $key;
+        $currentNamespace = (isset($namespace)) ? $namespace : $this->getNamespace();
+
+        return $currentNamespace . $this->namespaceSeparator . $key;
     }
 
     public function clear()
