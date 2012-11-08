@@ -17,30 +17,30 @@ class FileCache extends AbstractCache
 
     /**
      * Separator used to create element key from item key and namespace
-     * $namespace.$namespaceSeparator.$key = Element 
-     * 
+     * $namespace.$namespaceSeparator.$key = Element
+     *
      * @var string
      */
-    protected $namespaceSeparator = '_'; 
+    protected $namespaceSeparator = '_';
 
     /**
      * How deep in cache dir file should be storde.
-     * 
+     *
      * @var integer
      */
     protected $dirlvl = 0;
 
     /**
      * Required options
-     * 'directory' (string) the root directory for cache. 
-     * 
-     * Allowed options 
+     * 'directory' (string) the root directory for cache.
+     *
+     * Allowed options
      * 'dirlvl' (integer) must be lower than 32. Cache directory deep level.
-     * The more items in cache the greater should be the dirlvl parameter.  
-     * 
-     * Example: 
+     * The more items in cache the greater should be the dirlvl parameter.
+     *
+     * Example:
      * new FileCache(array('directory' => '/tmp', 'dirlvl' => 3));
-     * 
+     *
      * @param unknown_type $options
      */
     public function __construct($options = array())
@@ -48,7 +48,7 @@ class FileCache extends AbstractCache
         if (!is_array($options)) {
             throw new \InvalidArgumentException('File Cache require options as an array.');
         }
-        
+
         if (!array_key_exists('directory', $options)) {
             throw new \InvalidArgumentException(
             	'File Cache require cache directory path in options. '.
@@ -56,7 +56,7 @@ class FileCache extends AbstractCache
             );
         }
         $directory = $options['directory'];
-        
+
         if (!is_dir($directory) && ! @mkdir($directory, 0777, true)) {
             throw new \InvalidArgumentException(sprintf(
                 'Cache directory "%s" does not exist and could not be created.',
@@ -74,8 +74,8 @@ class FileCache extends AbstractCache
         if (array_key_exists('dirlvl', $options)) {
             $dirlvl = (int)$options['dirlvl'];
             if ((int)$dirlvl > 32 ) {
-                throw new \InvalidArgumentException('Dir Level cant be greater than 32.'); 
-            }    
+                throw new \InvalidArgumentException('Dir Level cant be greater than 32.');
+            }
         }
         parent::setOptions($options);
     }
@@ -120,7 +120,7 @@ class FileCache extends AbstractCache
     public function addItem($key, $item, $lifetime = 0, $namespace = null)
     {
         $filename     = $this->getFileName($key, $namespace);
-        
+
         if ($this->hasItem($key)) {
             return false;
         }
@@ -195,15 +195,16 @@ class FileCache extends AbstractCache
     }
 
     /**
-     * Clear only expired cache files. 
+     * Clear only expired cache files.
      * This method should be called from cron.
-     * 
+     *
      * @return boolean true if cleaning was successfu.l
      */
     public function clearExpired()
     {
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->directory), 
+            new \RecursiveDirectoryIterator($this->directory,
+                \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
         );
 
@@ -225,20 +226,21 @@ class FileCache extends AbstractCache
                 fclose($resource);
             }
         }
- 
+
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function clear()
     {
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->directory), 
+            new \RecursiveDirectoryIterator($this->directory,
+                \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
         );
-        
+
         foreach ($iterator as $path) {
             if ($path->isDir()) {
                 rmdir($path->__toString());
@@ -246,7 +248,7 @@ class FileCache extends AbstractCache
                 unlink($path->__toString());
             }
         }
- 
+
         return true;
     }
 
@@ -267,15 +269,15 @@ class FileCache extends AbstractCache
     }
 
     /**
-     * Returns full path to cache file for selected key. 
-     * 
+     * Returns full path to cache file for selected key.
+     *
      * @return string
      */
     protected function getFileName($key, $namespace = null)
     {
         $key = md5($key);
         $filePath = array();
-        
+
         if ($this->dirlvl) {
             $filePath = array_slice(str_split($key, (floor(strlen($key) / $this->dirlvl))), 0, $this->dirlvl);
         }

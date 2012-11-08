@@ -15,12 +15,12 @@ class ApcCache extends AbstractCache
 {
     /**
      * Separator used to create element key from item key and namespace
-     * $namespace.$namespaceSeparator.$key = Element 
-     * 
+     * $namespace.$namespaceSeparator.$key = Element
+     *
      * @var string
      */
-    protected $namespaceSeparator = ':'; 
-    
+    protected $namespaceSeparator = ':';
+
     public function __construct($options = null)
     {
         if (version_compare('3.0.0', phpversion('apc')) > 0) {
@@ -39,7 +39,7 @@ class ApcCache extends AbstractCache
         }
         parent::__construct($options);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -53,7 +53,7 @@ class ApcCache extends AbstractCache
         }
         return $item;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -64,7 +64,7 @@ class ApcCache extends AbstractCache
         }
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -75,7 +75,7 @@ class ApcCache extends AbstractCache
         }
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -83,7 +83,7 @@ class ApcCache extends AbstractCache
     {
         return apc_exists($this->buildKey($key, $namespace));
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -94,12 +94,12 @@ class ApcCache extends AbstractCache
 
         return apc_delete($this->buildKey($key, $namespace));
     }
-    
+
     /**
      * Build key from namespace and namespaceSeparator;
      * If optional parameter is $namespace is null namespace is taken from
      * method getNamespace()
-     * 
+     *
      * @return string
      */
     protected function buildKey($key, $namespace = null)
@@ -114,7 +114,7 @@ class ApcCache extends AbstractCache
         apc_clear_cache('user');
         return true;
     }
-    
+
     public function clearNamespace($namespace)
     {
         $cacheData = apc_cache_info('user');

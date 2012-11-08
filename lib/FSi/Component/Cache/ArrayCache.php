@@ -14,10 +14,10 @@ namespace FSi\Component\Cache;
 class ArrayCache extends AbstractCache
 {
     static private $cache = array();
-    
+
     /**
      * Build static $cache array that will simulate normal cache storage.
-     * 
+     *
      * @param unknown_type $options
      */
     public function __construct($options = null)

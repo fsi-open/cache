@@ -15,28 +15,28 @@ abstract class AbstractCache implements CacheInterface
 {
     /**
      * Cache namespace by defaul fsicache
-     * @var type 
+     * @var type
      */
-    protected $namespace = 'fsicache'; 
-    
+    protected $namespace = 'fsicache';
+
     /**
      * Cache options
-     * @var array 
+     * @var array
      */
     protected $options = array();
-    
+
     public function __construct($options = null)
     {
         if (isset($options)) {
             $this->setOptions($options);
         }
     }
-    
+
     /**
-     * Set cache options. 
-     * 
+     * Set cache options.
+     *
      * @param array $options
-     * @return 
+     * @return
      */
     public function setOptions($options)
     {
@@ -49,10 +49,10 @@ abstract class AbstractCache implements CacheInterface
             }
         }
     }
-    
+
     /**
      * Get cache options.
-     * 
+     *
      * @return array
      */
     public function getOptions()

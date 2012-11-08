@@ -11,7 +11,6 @@
 
 namespace FSi\Component\Cache\Tests;
 
-
 abstract class CacheTest extends \PHPUnit_Framework_TestCase
 {
     public function testBasics()
@@ -39,14 +38,14 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $cache = $this->_getCacheDriver();
         $cache->setItem('key1', 'test', 0, 'testnamespace1');
         $cache->setItem('key2', 'test', 0, 'testnamespace2');
-         
+
         $this->assertTrue($cache->hasItem('key1', 'testnamespace1'));
         $this->assertTrue($cache->hasItem('key2', 'testnamespace2'));
-        
+
         $this->assertFalse($cache->hasItem('key2', 'testnamespace1'));
         $this->assertFalse($cache->hasItem('key1', 'testnamespace2'));
     }
-    
+
     public function testNamespace()
     {
         $cache = $this->_getCacheDriver();
@@ -59,7 +58,7 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
 
         $cache->setItem('key2', 'test');
         $this->assertTrue($cache->hasItem('key2'));
-        
+
         $cache->clear();
     }
 
@@ -83,7 +82,7 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $cache->setNamespace('testnamespace1');
         $this->assertFalse($cache->hasItem('key1'));
     }
-    
+
     public function testClearNamespaceCache()
     {
         $cache = $this->_getCacheDriver();
@@ -93,7 +92,7 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cache->hasItem('key'));
 
         $cache->setNamespace('testnamespace1');
-        $cache->setItem('key1', 'test');  
+        $cache->setItem('key1', 'test');
         $this->assertTrue($cache->hasItem('key1'));
 
         $cache->clearNamespace('testnamespace');
@@ -110,9 +109,9 @@ abstract class CacheTest extends \PHPUnit_Framework_TestCase
        $cache = $this->_getCacheDriver();
        $cache->setItem('key', 'test', 20);
        $cache->setItem('key1', 'test', 3);
-       
+
        sleep(7);
-       
+
        $this->assertTrue($cache->hasItem('key'));
        $this->assertFalse($cache->hasItem('key1'));
     }

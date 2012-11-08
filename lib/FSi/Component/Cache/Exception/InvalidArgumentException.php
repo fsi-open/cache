@@ -11,6 +11,6 @@
 
 namespace FSi\Component\Cache\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException 
+class InvalidArgumentException extends \InvalidArgumentException
 {
 }
