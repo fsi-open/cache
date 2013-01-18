@@ -52,6 +52,22 @@ class FileCacheTest extends CacheTest
        $this->assertFalse($cache->hasItem('key2'));
     }
 
+    public function testRemoveItem() {
+        $cache = $this->_getCacheDriver();
+        
+        $cache->setItem('key', 'test', 0, 'ns');
+        $cache->setItem('key', 'test');
+        
+        $this->assertTrue($cache->hasItem('key'));
+        $this->assertTrue($cache->hasItem('key', 'ns'));
+        $this->assertTrue($cache->removeItem('key'));
+        $this->assertFalse($cache->removeItem('key'));
+        $this->assertTrue($cache->removeItem('key', 'ns'));
+        $this->assertFalse($cache->removeItem('key', 'ns'));
+        $this->assertFalse($cache->hasItem('key'));
+        $this->assertFalse($cache->hasItem('key', 'ns'));
+    }
+    
     public function tearDown()
     {
         /* Clear empty cache dirs */
