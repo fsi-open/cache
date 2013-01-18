@@ -191,6 +191,10 @@ class FileCache extends AbstractCache
      */
     public function removeItem($key, $namespace = null)
     {
+        if (!$this->hasItem($key, $namespace)) {
+            return false;
+        }
+        
         return unlink($this->getFilename($key, $namespace));
     }
 
