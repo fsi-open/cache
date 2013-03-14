@@ -19,8 +19,8 @@ class FileCacheTest extends CacheTest
 
     protected function setUp()
     {
-        /* Setup unique cache dir */
-        $this->cacheDir = sys_get_temp_dir() . "fsi_cache_". uniqid();
+        $tempPath = dirname(__FILE__) . '/../../../../temp/' ;
+        $this->cacheDir = $tempPath . "fsi_cache_". uniqid();
     }
 
     protected function _getCacheDriver()
@@ -52,7 +52,8 @@ class FileCacheTest extends CacheTest
        $this->assertFalse($cache->hasItem('key2'));
     }
 
-    public function testRemoveItem() {
+    public function testRemoveItem()
+    {
         $cache = $this->_getCacheDriver();
         
         $cache->setItem('key', 'test', 0, 'ns');
@@ -67,20 +68,23 @@ class FileCacheTest extends CacheTest
         $this->assertFalse($cache->hasItem('key'));
         $this->assertFalse($cache->hasItem('key', 'ns'));
     }
-    
+
     public function tearDown()
     {
         /* Clear empty cache dirs */
         $this->rrmdir($this->cacheDir);
     }
 
-    private function rrmdir($dir) {
+    private function rrmdir($dir)
+    {
         foreach(glob($dir . '/*') as $file) {
-            if(is_dir($file))
+            if(is_dir($file)) {
                 $this->rrmdir($file);
-            else
+            } else {
                 unlink($file);
+            }
         }
+
         rmdir($dir);
     }
 }
