@@ -119,11 +119,11 @@ class FileCache extends AbstractCache
      */
     public function addItem($key, $item, $lifetime = 0, $namespace = null)
     {
-        $filename     = $this->getFileName($key, $namespace);
-
         if ($this->hasItem($key)) {
             return false;
         }
+        
+        $filename     = $this->getFileName($key, $namespace);
 
         if ($lifetime > 0) {
             $lifetime = time() + $lifetime;
